@@ -1,0 +1,2 @@
+# amma
+ self aware replica
