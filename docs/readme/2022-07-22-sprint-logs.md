@@ -1,5 +1,12 @@
 Parallel Program using CUDA
 
+22-07-22
+* Build Github Action for C++/Cmake - https://github.com/marketplace/actions/run-cmake
+  * https://gist.github.com/NickNaso/0d478f1481686d5bcc868cac06620a60
+  * https://cristianadam.eu/20191222/using-github-actions-with-c-plus-plus-and-cmake/
+  * https://github.com/ptheywood/cuda-cmake-github-actions
+  * https://github.com/Ahdhn/CUDATemplate
+
 22-07-21 
 * Thrust library - C++
 * CUDA containers - https://catalog.ngc.nvidia.com/orgs/nvidia/teams/k8s/containers/cuda-sample 
