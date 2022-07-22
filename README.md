@@ -10,8 +10,7 @@
 
 
 ### Research
-* Abstract
-  * Build a decision-making entity based on user data and base rules
+
 
 * Draft Paper available at amma/docs/paper/
 * Please use the below citation

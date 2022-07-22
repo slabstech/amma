@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "ಚದುರಂಗ Code"
+title: "ಅಮ್ಮ - Amma Code"
 excerpt: "How to build it"
-categories: ಚದುರಂಗ
-tags: [ ಚದುರಂಗ  ]
+categories: amma
+tags: [ amma  ]
 
 date: 2022-07-18T08:08:50-04:00
 
