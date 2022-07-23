@@ -1,5 +1,15 @@
 Parallel Program using CUDA
 
+23-07-22
+* Setup CUDA project
+  * https://developer.nvidia.com/blog/building-cuda-applications-cmake/
+  * https://cliutils.gitlab.io/modern-cmake/chapters/packages/CUDA.html
+  * https://github.com/eyalroz/cuda-kat/blob/development/tests/CMakeLists.txt
+  * https://stackoverflow.com/questions/19980412/how-to-let-cmake-find-cuda
+* Installing CUDA
+  * https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html
+  * https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=deb_local
+
 22-07-22
 * Build Github Action for C++/Cmake - https://github.com/marketplace/actions/run-cmake
   * https://gist.github.com/NickNaso/0d478f1481686d5bcc868cac06620a60
