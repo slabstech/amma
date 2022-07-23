@@ -5,18 +5,6 @@
 *.cubin
 *.fatbin
 .idea/
-.vs/*
-amma/x64/
 
-x64/
-src/amma/!.vs/settings.json
-src/amma/!.vs/tasks.json
-src/amma/!.vs/launch.json
-src/amma/!.vs/extensions.json
-src/amma/!.vs/*.code-snippets
 
-# Local History for Visual Studio Code
-src/amma/.history/
-
-# Built Visual Studio Code Extensions
-src/amma/*.vsix
+cmake-build-debug/

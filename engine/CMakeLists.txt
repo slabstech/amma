@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.22)
-project(code)
+find_package(CUDAToolkit REQUIRED)
+project(amma CUDA)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CUDA_STANDARD 23)
 
-add_executable(code main.cpp)
+add_executable(amma main.cu)
+
+set_target_properties(amma PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON)
