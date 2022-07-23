@@ -4,6 +4,14 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <iostream>
+//#include "StopWatch.h"
+#include <sstream>
+#include <string>
+#include <fstream>
+#include <vector>
+#include <math.h>
+
 using namespace std;
 
 cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size);
@@ -25,7 +33,12 @@ __global__ void cube(float *d_out, float *d_in){
     float f = d_in[idx];
     d_out[idx] = f * f * f ;
 }
-void task_square(){
+
+struct Point{
+    float x,y;
+};
+
+int task_square(){
     const int ARRAY_SIZE = 64;
     const int ARRAY_BYTES = ARRAY_SIZE * sizeof(float);
 
@@ -76,10 +89,10 @@ void task_square(){
     cudaFree(d_in);
     cudaFree(d_out);
 
+    return 0;
 }
-int main()
-{
-    task_square();
+
+int cuda_sample_code(){
     const int arraySize = 5;
     const int a[arraySize] = { 1, 2, 3, 4, 5 };
     const int b[arraySize] = { 10, 20, 30, 40, 50 };
@@ -93,7 +106,7 @@ int main()
     }
 
     printf("{1,2,3,4,5} + {10,20,30,40,50} = {%d,%d,%d,%d,%d}\n",
-        c[0], c[1], c[2], c[3], c[4]);
+           c[0], c[1], c[2], c[3], c[4]);
 
     // cudaDeviceReset must be called before exiting in order for profiling and
     // tracing tools such as Nsight and Visual Profiler to show complete traces.
@@ -162,7 +175,7 @@ cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size)
         fprintf(stderr, "addKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
         goto Error;
     }
-    
+
     // cudaDeviceSynchronize waits for the kernel to finish, and returns
     // any errors encountered during the launch.
     cudaStatus = cudaDeviceSynchronize();
@@ -178,10 +191,178 @@ cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size)
         goto Error;
     }
 
-Error:
+    Error:
     cudaFree(dev_c);
     cudaFree(dev_a);
     cudaFree(dev_b);
-    
+
     return cudaStatus;
+}
+
+int task_polygon(){
+    cout << "Running Task4 to find shortest path in Polygon Maps" << endl;
+    int argc=0;
+    char **argv;
+    if(argc !=2)
+    {
+        cout << "Input file not found" << endl ;
+        exit(1);
+    }
+
+    string input_file_name = argv[1];
+
+    cout << "Processing input file : " << input_file_name << endl;
+    std::ifstream infile(input_file_name);
+    string line;
+
+    std::getline(infile, line);
+    std::istringstream iss(line);
+
+
+    Point start;
+    iss >> start.x ;
+    iss >> start.y ;
+
+    std::getline(infile, line);
+    std::istringstream isse(line);
+
+
+    Point end;
+    isse >> end.x ;
+    isse >> end.y ;
+
+
+    vector<vector<Point>> polygons;
+
+    std::getline(infile, line); // empty line
+
+
+    vector<Point> temp_point;
+    while (std::getline(infile, line))
+    {
+        std::istringstream iss(line);
+
+        if(line == "")
+        {
+            polygons.push_back(temp_point) ;
+            temp_point.clear();
+        }
+        else
+        {
+            Point temp;
+            iss >> temp.x ;
+            iss >> temp.y ;
+
+            temp_point.push_back(temp);
+
+        }
+    }
+
+    cout << "total number of polygons : " << polygons.size() << endl;
+
+    double distance = sqrt( pow((end.x - start.x),2) +  pow(( end.y - start.y),2)) ;
+
+    cout << "Shortest possible distance(Ignoring Obstacles): " << distance << endl ;
+
+
+    for(int i=0;i< polygons.size();i++){
+        temp_point = polygons.at(i);
+        for(int j=0;j< temp_point.size();j++){
+            Point temp = temp_point.at(j);
+
+            //cout << temp.x << " " << temp.y << endl;
+        }
+
+        //cout << "\n" ;
+    }
+
+
+    ofstream vis_graph_file;
+
+    remove( "points.txt" );
+    vis_graph_file.open ("points.txt",  ios::out | ios::app);
+
+
+    vector<Point> vis_graph_points;
+
+
+    for(int i=0;i< polygons.size();i++){
+        temp_point = polygons.at(i);  // Each polygon
+        for(int j=0;j< temp_point.size();j++){
+            Point temp = temp_point.at(j);
+
+            vis_graph_points.push_back(start);
+            vis_graph_points.push_back(temp);
+
+            /*
+
+            for(int k=0 ; k < temp_point.size() ; k++ ){
+                Point next_point = temp_point.at(k);
+                vis_graph_points.push_back(next_point);
+
+                //vis_graph_file << "\n" ;
+            }
+*/
+            //vis_graph_file << "\n" ;
+        }
+
+        //vis_graph_file << "\n" ;
+    }
+
+
+
+    for(int i=0;i< polygons.size();i++){
+        temp_point = polygons.at(i);  // Each polygon
+        for(int j=0;j< temp_point.size();j++){
+            Point temp = temp_point.at(j);
+
+            vis_graph_points.push_back(temp);
+            vis_graph_points.push_back(end);
+
+
+/*
+						for(int k=0 ; k < temp_point.size() ; k++ ){
+							Point next_point = temp_point.at(k);
+							vis_graph_points.push_back(next_point);
+
+							//vis_graph_file << "\n" ;
+						}
+*/
+            //vis_graph_file << "\n" ;
+        }
+
+        //vis_graph_file << "\n" ;
+    }
+
+
+    for(int i=0; i< vis_graph_points.size(); i++){
+        Point vis_points = vis_graph_points.at(i);
+
+        vis_graph_file << vis_points.x << " " << vis_points.y << endl;
+    }
+
+
+
+    vis_graph_file.close();
+
+
+//	double time = stopWatch.elapsedTime();
+
+    //cout << "Total Execution Time : " << time << endl;
+
+
+
+
+    return 0;
+}
+
+int main()
+{
+    int task_square_status = task_square();
+
+    int cudaStatus = cuda_sample_code();
+
+    int task4_status = task_polygon();
+    return cudaStatus;
+
 }
