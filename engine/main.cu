@@ -11,6 +11,10 @@
 #include <vector>
 #include <math.h>
 
+#include "rapidjson/reader.h"
+using namespace rapidjson;
+
+
 using namespace std;
 
 cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size);
@@ -355,19 +359,80 @@ int task_polygon(int argc,char *argv){
     return 0;
 }
 
+
+
+struct MyHandler {
+    bool Null() { cout << "Null()" << endl; return true; }
+    bool Bool(bool b) { cout << "Bool(" << boolalpha << b << ")" << endl; return true; }
+    bool Int(int i) { cout << "Int(" << i << ")" << endl; return true; }
+    bool Uint(unsigned u) { cout << "Uint(" << u << ")" << endl; return true; }
+    bool Int64(int64_t i) { cout << "Int64(" << i << ")" << endl; return true; }
+    bool Uint64(uint64_t u) { cout << "Uint64(" << u << ")" << endl; return true; }
+    bool Double(double d) { cout << "Double(" << d << ")" << endl; return true; }
+    bool RawNumber(const char* str, SizeType length, bool copy) {
+        cout << "Number(" << str << ", " << length << ", " << boolalpha << copy << ")" << endl;
+        return true;
+    }
+    bool String(const char* str, SizeType length, bool copy) {
+        cout << "String(" << str << ", " << length << ", " << boolalpha << copy << ")" << endl;
+        return true;
+    }
+    bool StartObject() { cout << "StartObject()" << endl; return true; }
+    bool Key(const char* str, SizeType length, bool copy) {
+        cout << "Key(" << str << ", " << length << ", " << boolalpha << copy << ")" << endl;
+        return true;
+    }
+    bool EndObject(SizeType memberCount) { cout << "EndObject(" << memberCount << ")" << endl; return true; }
+    bool StartArray() { cout << "StartArray()" << endl; return true; }
+    bool EndArray(SizeType elementCount) { cout << "EndArray(" << elementCount << ")" << endl; return true; }
+};
+
+int read_json_data(string file_path)
+{
+
+    string input_file_name = file_path;
+
+    cout << "Processing input file : " << input_file_name << endl;
+    std::ifstream infile(input_file_name);
+    string line;
+
+    if(infile){
+        cout << "file not found : "<< file_path << endl;
+    }
+    std::getline(infile, line);
+    std::stringstream iss(line);
+
+    cout << line << iss.str() <<endl;
+    const char json[] = " { \"hello\" : \"world\", \"t\" : true , \"f\" : false, \"n\": null, \"i\":123, \"pi\": 3.1416, \"a\":[1, 2, 3, 4] } ";
+
+    MyHandler handler;
+    Reader reader;
+    StringStream ss(json);
+    reader.Parse(ss, handler);
+
+   // StringStream data(iss);
+    StringStream ss_data(iss.str().c_str());
+    reader.Parse(ss_data, handler);
+
+
+    return 0;
+}
 int main()
 {
     StopWatch* stopWatch= new StopWatch();
     stopWatch->start();
-    int task_square_status = task_square();
 
-    int cudaStatus = cuda_sample_code();
+    //int task_square_status = task_square();
 
-    char* filePath="resources/data/polygons_300.txt";
-    int task_polygon_status = task_polygon(1,filePath);
+    //int cudaStatus = cuda_sample_code();
 
+    //char* filePath="resources/data/polygons_300.txt";
+    //int task_polygon_status = task_polygon(1,filePath);
+
+    string json_file_path="resources/data.json";
+    int data_read_status = read_json_data(json_file_path);
     double time = stopWatch->elapsedTime();
     cout << "Total Time" << time;
-    return task_polygon_status;
+    return 0;
 
 }

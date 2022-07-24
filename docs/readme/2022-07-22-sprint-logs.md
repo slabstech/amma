@@ -1,5 +1,11 @@
 Parallel Program using CUDA
 
+24-07-2022
+* Read Json
+  * https://rapidjson.org/
+  * https://github.com/Tencent/rapidjson/
+  * https://github.com/Tencent/rapidjson/blob/master/example/simplereader/simplereader.cpp
+
 23-07-22
 * Setup CUDA project
   * https://developer.nvidia.com/blog/building-cuda-applications-cmake/

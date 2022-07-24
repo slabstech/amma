@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 find_package(CUDAToolkit REQUIRED)
 project(amma CUDA)
 
+include_directories("include/")
 set(CMAKE_CUDA_STANDARD 23)
 
 add_executable(amma main.cu)
