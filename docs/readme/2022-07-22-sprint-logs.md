@@ -9,6 +9,10 @@ Parallel Program using CUDA
   * https://devconnected.com/how-to-delete-local-and-remote-tags-on-git/
 * Yaml verification
   * http://www.yamllint.com/
+* Docker Install
+  * https://docs.docker.com/engine/install/ubuntu/
+  * curl -fsSL https://get.docker.com -o get-docker.sh
+  * sudo sh get-docker.sh
 
 23-07-22
 * Setup CUDA project
