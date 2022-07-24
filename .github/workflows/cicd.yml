@@ -26,7 +26,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
       - name: Install CUDA
         env:
             cuda: ${{ matrix.cuda }}
