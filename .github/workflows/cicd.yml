@@ -1,82 +1,91 @@
-name: "ci-cd"
-on:
-  push:
-    branches:
-      - sp1-process-data
-    tags:
-      - 'v*'
-  pull_request:
-    types: [ opened, reopened, synchronize, ready_for_review ]
-  release:
-    types: [ published ]
-
+---
 jobs:
-  setup-build:
-    runs-on: ${{ matrix.os }}
-    name: setup-build
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-22.04
-            cuda: "11.3"
-            gcc: 10
-    env:
-      build_dir: "build"
-      config: "Release"
-
+  push-deploy:
+    name: push-deploy
+    permissions:
+      contents: read
+      packages: write
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: "Install CUDA"
+      -
+        uses: actions/checkout@v3
+      -
+        name: deploy-container-to-registry-client
+        uses: slabstech/action-deploy-container-to-registry@v0.0.1
+        with:
+          docker-password: "${{ secrets.DOCKER_PASSWORD }}"
+          docker-username: "${{ secrets.DOCKER_USERNAME }}"
+          dockerfile-path: ./Dockerfile
+          github-actor: "${{ github.actor }}"
+          github-repository: "${{ github.repository }}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          project-name: amma
+          service-name: engine
+  setup-build:
+    env:
+      build_dir: build
+      config: Release
+    name: setup-build
+    runs-on: "${{ matrix.os }}"
+    steps:
+      -
+        uses: actions/checkout@v3
+      -
         env:
-            cuda: ${{ matrix.cuda }}
-          run: ./scripts/install_cuda_ubuntu.sh
-          shell: bash
-
-      # Specify the correct host compilers
-      - name: "Install/Select gcc and g++"
+          cuda: "${{ matrix.cuda }}"
+        name: "Install CUDA"
+        run: ./scripts/install_cuda_ubuntu.sh
+        shell: bash
+      -
+        name: "Install/Select gcc and g++"
         run: |
           sudo apt-get install -y gcc-${{ matrix.gcc }} g++-${{ matrix.gcc }}
           echo "CC=/usr/bin/gcc-${{ matrix.gcc }}" >> $GITHUB_ENV
           echo "CXX=/usr/bin/g++-${{ matrix.gcc }}" >> $GITHUB_ENV
           echo "CUDAHOSTCXX=/usr/bin/g++-${{ matrix.gcc }}" >> $GITHUB_ENV
-      - name: "Configure cmake"
+      -
         id: configure
-        run: cmake . -B ${{ env.build_dir }} -DCMAKE_BUILD_TYPE=${{ env.config }}
-
-      - name: "Configure Error Processing"
-        if: ${{ failure() && steps.configure.outcome == 'failure' }}
-        working-directory: ${{ env.build_dir }}
+        name: "Configure cmake"
+        run: "cmake . -B ${{ env.build_dir }} -DCMAKE_BUILD_TYPE=${{ env.config }}"
+      -
+        if: "${{ failure() && steps.configure.outcome == 'failure' }}"
+        name: "Configure Error Processing"
         run: |
-            if [[ -f "CMakeFiles/CMakeOutput.log" ]]; then
-              echo "---- CMakeFiles/CMakeOutput.log"
-              cat CMakeFiles/CMakeOutput.log
-              echo "----"
-            fi
-            if [[ -f "CMakeFiles/CMakeError.log" ]]; then
-              echo "---- CMakeFiles/CMakeError.log"
-              cat CMakeFiles/CMakeError.log
-              echo "----"
-            fi
-      - name: "Build everything else"
-        working-directory: ${{ env.build_dir }}/engine
-        run: cmake --build . --target all --verbose -j `nproc`
-
-  push-deploy:
-    name: push-deploy
-    runs-on : ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v3
-      - name: deploy-container-to-registry-client
-        uses: slabstech/action-deploy-container-to-registry@v0.0.1
-        with:
-          docker-username: ${{ secrets.DOCKER_USERNAME }}
-          docker-password: ${{ secrets.DOCKER_PASSWORD }}
-          github-actor: ${{ github.actor }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          github-repository: ${{ github.repository }}
-          project-name: amma
-          service-name: engine
-          dockerfile-path: ./Dockerfile
+          if [[ -f "CMakeFiles/CMakeOutput.log" ]]; then
+            echo "---- CMakeFiles/CMakeOutput.log"
+            cat CMakeFiles/CMakeOutput.log
+            echo "----"
+          fi
+          if [[ -f "CMakeFiles/CMakeError.log" ]]; then
+            echo "---- CMakeFiles/CMakeError.log"
+            cat CMakeFiles/CMakeError.log
+            echo "----"
+          fi
+        working-directory: "${{ env.build_dir }}"
+      -
+        name: "Build everything else"
+        run: "cmake --build . --target all --verbose -j `nproc`"
+        working-directory: "${{ env.build_dir }}/engine"
+    strategy:
+      matrix:
+        include:
+          -
+            cuda: "11.3"
+            gcc: 10
+            os: ubuntu-22.04
+name: ci-cd
+true:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+  push:
+    branches:
+      - sp1-process-data
+    tags:
+      - v*
+  release:
+    types:
+      - published
