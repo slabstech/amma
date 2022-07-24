@@ -1,4 +1,15 @@
-#include "StopWatch.h"
+#include <time.h>
+
+class StopWatch
+{
+    struct timespec lastStartTime;
+
+public:
+    StopWatch();
+    ~StopWatch(){}
+    void start();
+    double elapsedTime();
+};
 
 StopWatch::StopWatch()
 {
