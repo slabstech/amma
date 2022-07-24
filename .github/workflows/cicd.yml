@@ -25,10 +25,10 @@ jobs:
           github-actor: ${{ github.actor }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-repository: ${{ github.repository }}
-          project-name: amma
+          project-name: "amma"
           action_build_dir: "build"
           action_config: "Release"
-          cmake_path: engine/
+          action_cmake_path: "engine/"
   push-deploy:
     name: push-deploy
     runs-on : ubuntu-latest
