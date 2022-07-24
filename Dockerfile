@@ -1,4 +1,4 @@
-FROM docker pull nvidia/cuda:11.7.0-base-ubuntu20.04
+FROM nvidia/cuda:11.7.0-base-ubuntu20.04
 WORKDIR /app
 RUN apt update && \
     apt install --no-install-recommends -y build-essential && \
