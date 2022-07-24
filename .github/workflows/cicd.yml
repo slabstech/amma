@@ -22,10 +22,6 @@ jobs:
         with:
           cuda: ${{ matrix.cuda }}
           gcc: ${{ matrix.gcc }}
-          github-actor: ${{ github.actor }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          github-repository: ${{ github.repository }}
-          project-name: "amma"
           action_build_dir: "build"
           action_config: "Release"
           action_cmake_path: "engine/"

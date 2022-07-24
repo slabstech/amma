@@ -5,6 +5,10 @@ Parallel Program using CUDA
   * https://rapidjson.org/
   * https://github.com/Tencent/rapidjson/
   * https://github.com/Tencent/rapidjson/blob/master/example/simplereader/simplereader.cpp
+* Delete tag for actions
+  * https://devconnected.com/how-to-delete-local-and-remote-tags-on-git/
+* Yaml verification
+  * http://www.yamllint.com/
 
 23-07-22
 * Setup CUDA project
