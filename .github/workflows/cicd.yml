@@ -29,11 +29,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-repository: ${{ github.repository }}
           project-name: amma
-          build_dir: {{ env.build_dir }}
-          config: {{ env.config }}
+          action_build_dir: {{ env.build_dir }}
+          action_config: {{ env.config }}
           cmake_path: engine/
-
-
   push-deploy:
     name: push-deploy
     runs-on : ubuntu-latest
