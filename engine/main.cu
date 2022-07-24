@@ -4,8 +4,7 @@
 
 #include <stdio.h>
 #include <iostream>
-#include <iostream>
-//#include "StopWatch.h"
+#include "StopWatch.cpp"
 #include <sstream>
 #include <string>
 #include <fstream>
@@ -199,17 +198,17 @@ cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size)
     return cudaStatus;
 }
 
-int task_polygon(){
+int task_polygon(int argc,char *argv){
     cout << "Running Task4 to find shortest path in Polygon Maps" << endl;
-    int argc=0;
-    char **argv;
-    if(argc !=2)
+
+    if(argc !=1)
     {
         cout << "Input file not found" << endl ;
-        exit(1);
+        //exit(1);
+        return 0;
     }
 
-    string input_file_name = argv[1];
+    string input_file_name = argv;
 
     cout << "Processing input file : " << input_file_name << endl;
     std::ifstream infile(input_file_name);
@@ -358,11 +357,17 @@ int task_polygon(){
 
 int main()
 {
+    StopWatch* stopWatch= new StopWatch();
+    stopWatch->start();
     int task_square_status = task_square();
 
     int cudaStatus = cuda_sample_code();
 
-    int task4_status = task_polygon();
-    return cudaStatus;
+    char* filePath="resources/data/polygons_300.txt";
+    int task_polygon_status = task_polygon(1,filePath);
+
+    double time = stopWatch->elapsedTime();
+    cout << "Total Time" << time;
+    return task_polygon_status;
 
 }
