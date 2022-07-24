@@ -26,24 +26,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Install CUDA
+      - name: "Install CUDA"
         env:
             cuda: ${{ matrix.cuda }}
           run: ./scripts/install_cuda_ubuntu.sh
           shell: bash
 
       # Specify the correct host compilers
-      - name: Install/Select gcc and g++
+      - name: "Install/Select gcc and g++"
         run: |
           sudo apt-get install -y gcc-${{ matrix.gcc }} g++-${{ matrix.gcc }}
           echo "CC=/usr/bin/gcc-${{ matrix.gcc }}" >> $GITHUB_ENV
           echo "CXX=/usr/bin/g++-${{ matrix.gcc }}" >> $GITHUB_ENV
           echo "CUDAHOSTCXX=/usr/bin/g++-${{ matrix.gcc }}" >> $GITHUB_ENV
-      - name: Configure cmake
+      - name: "Configure cmake"
         id: configure
         run: cmake . -B ${{ env.build_dir }} -DCMAKE_BUILD_TYPE=${{ env.config }}
 
-      - name: Configure Error Processing
+      - name: "Configure Error Processing"
         if: ${{ failure() && steps.configure.outcome == 'failure' }}
         working-directory: ${{ env.build_dir }}
         run: |
@@ -57,7 +57,7 @@ jobs:
               cat CMakeFiles/CMakeError.log
               echo "----"
             fi
-      - name: Build everything else
+      - name: "Build everything else"
         working-directory: ${{ env.build_dir }}/engine
         run: cmake --build . --target all --verbose -j `nproc`
 
