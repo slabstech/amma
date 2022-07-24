@@ -4,7 +4,7 @@ RUN apt update && \
     apt install --no-install-recommends -y build-essential && \
     apt clean && rm -rf /var/lib/apt/lists/*
 COPY scripts/install_cuda_ubuntu.sh .
-RUN sh install_cuda_ubuntu.sh
+RUN ./install_cuda_ubuntu.sh
 RUN sudo apt-get install -y gcc-10 g++-10  \
 RUN export "CC=/usr/bin/gcc-10"
 RUN export "CXX=/usr/bin/g++-10"
