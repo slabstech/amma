@@ -1,4 +1,4 @@
-# amma
+# ಅಮ್ಮ / amma
  self aware replica
 
 * Engine written in CUDA
