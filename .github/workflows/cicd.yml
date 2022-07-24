@@ -1,38 +1,30 @@
-name: "revive"
-on:
-  push:
-    branches:
-      - main
-    tags:
-      - 'v*'
-  pull_request:
-    types: [ opened, reopened, synchronize, ready_for_review ]
-  release:
-    types: [ published ]
+name: "ci-cd"
+on: [push, pull_request]
 
 jobs:
   setup-build:
+    runs-on: ${{ matrix.os }}
     name: setup-build
     strategy:
       matrix:
-        version : [17]
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+        include:
+          - os: ubuntu-22.04
+            cuda: "11.7"
+            gcc: 10
+    permissions:
+      packages: write
+      contents: read
+
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v2
+      - name: action-cuda-compiler
+        uses: slabstech/action-cuda-compiler@v0.0.1
         with:
-          distribution: adopt
-          java-version: ${{ matrix.version }}
-          cache: maven
-      - name: "Build the configured project"
-        run: mvn -B package --file pom.xml
-
-      - name: Archive test report
-        uses: actions/upload-artifact@v2
-        with:
-          name: Test report
-          path: build/reports/tests/test
+          cuda: ${{ matrix.cuda }}
+          gcc: ${{ matrix.gcc }}
+          action_build_dir: "build"
+          action_config: "Release"
+          action_cmake_path: "engine/"
   push-deploy:
     name: push-deploy
     runs-on : ubuntu-latest
