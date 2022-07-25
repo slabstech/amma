@@ -37,5 +37,27 @@
       "toetouch": ["finger", "palm"]
     }
   },
-  "Payment": ["Months", "Quarterly", "Half-yearly", "Yearly"]
+  "Payment": ["Months", "Quarterly", "Half-yearly", "Yearly"],
+  "electronic": {
+    "computer": "Omen 17 Laptop",
+    "mini-computer": "Raspberry Pi",
+    "smart-watch": "Band 2 Watch",
+    "drone": "DJI Ryze Tello",
+    "Speaker": "Logitech 60W Bluetooth",
+    "Mouse": "Wireless Tag, Wired",
+    "Keyboard": "Logitech Wireless",
+    "Powerbank": "2000W Xiaomi Bank",
+    "MemoryBank": "64Gb, 32Gb",
+    "Controller": "Flight Stick, Joystick",
+    "Camera": "Yi Action Camera",
+    "Printer": "HP All-in-One 3425",
+    "Dongle": "USB holder, Data Dongle"
+  },
+  "wishlist": {
+    "shoes": "Nike Revolution 2",
+    "white t-shirt": "6",
+    "dry fruit": "6x500gm",
+    "Masala Container": "1 box",
+    "Dharwad Pedha": "1 Kg"
+  }
 }
